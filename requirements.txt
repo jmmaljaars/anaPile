@@ -1,4 +1,6 @@
 git+https://github.com/ritchie46/pygef.git@master
+pre-commit
+black
 numpy
 pandas==0.24.2
 pygef

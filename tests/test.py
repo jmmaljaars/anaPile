@@ -116,6 +116,11 @@ class Pressure(TestCase):
         df = soil.join_cpt_with_classification(self.gef, layer_table)
 
         tipping_point = nap_to_depth(self.gef.zid, -2.1)
+        # print(tipping_point)
+        # print(self.gef.zid)
+        # print(self.gef.df.columns)
+        # print(self.gef.df[["depth", "elevation_with_respect_to_NAP"]])
+        # quit()
         idx_tp = np.argmin(np.abs(self.gef.df.depth.values - tipping_point))
         s = slice(0, idx_tp - 1)
 
@@ -182,12 +187,30 @@ class TestSettlementCalculation(TestCase):
             pile_factor_s=1
         )
 
+        # Assert that tipping points are as yet  none
+        self.assertIsNone(self.calc.negative_friction_tipping_point_nap)
+        self.assertIsNone(self.calc.positive_friction_tipping_point_nap)
+
     def tearDown(self) -> None:
         plt.close('all')
 
     def test_(self):
         self.calc.plot_pile_calculation(-12)
         self.calc.plot_pile_calculation(np.linspace(0, -17), figsize=(10, 10))
+
+        # Tipping points must be set by now, test
+        self.assertAlmostEqual(
+            self.calc.negative_friction_tipping_point_nap,
+            self.calc.merged_soil_properties.elevation_with_respect_to_NAP[
+                self.calc.negative_friction_slice.stop
+            ],
+        )
+        self.assertAlmostEqual(
+            self.calc.positive_friction_tipping_point_nap,
+            self.calc.merged_soil_properties.elevation_with_respect_to_NAP[
+                self.calc.positive_friction_slice.start
+            ],
+        )
 
 
 if __name__ == '__main__':

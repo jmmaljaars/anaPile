@@ -1,3 +1,4 @@
+git+https://github.com/ritchie46/pygef.git@master
 numpy
 pandas==0.24.2
 pygef

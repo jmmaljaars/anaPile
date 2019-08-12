@@ -116,11 +116,6 @@ class Pressure(TestCase):
         df = soil.join_cpt_with_classification(self.gef, layer_table)
 
         tipping_point = nap_to_depth(self.gef.zid, -2.1)
-        # print(tipping_point)
-        # print(self.gef.zid)
-        # print(self.gef.df.columns)
-        # print(self.gef.df[["depth", "elevation_with_respect_to_NAP"]])
-        # quit()
         idx_tp = np.argmin(np.abs(self.gef.df.depth.values - tipping_point))
         s = slice(0, idx_tp - 1)
 
